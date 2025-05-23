@@ -1,0 +1,40 @@
+syntax = "proto3";
+package statistics;
+option go_package = "Assignment1_AdletMusabaev/proto";
+
+message UserOrderStatisticsRequest {
+    string user_id = 1;
+}
+
+message UserOrderStatisticsResponse {
+    int32 order_count = 1;
+    string peak_order_time = 2; // e.g., "14:00-15:00"
+}
+
+message UserStatisticsRequest {
+    string user_id = 1;
+}
+
+message UserStatisticsResponse {
+    int32 total_users = 1;
+    int32 user_order_count = 2;
+}
+
+service StatisticsService {
+    rpc GetUserOrdersStatistics (UserOrderStatisticsRequest) returns (UserOrderStatisticsResponse);
+    rpc GetUserStatistics (UserStatisticsRequest) returns (UserStatisticsResponse);
+}
+
+// NATS events
+message OrderEvent {
+    string id = 1;
+    string user_id = 2;
+    string action = 3; // "created", "updated", "deleted"
+    int64 timestamp = 4;
+}
+
+message InventoryEvent {
+    string id = 1;
+    string action = 2; // "created", "updated", "deleted"
+    int64 timestamp = 3;
+}
